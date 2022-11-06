@@ -77,7 +77,44 @@ const watch = watchGenerator();
 redux-saga 는 위 함수와 비슷한 원리로 작동한다.
 
 - all 함수 : 여러 사가를 합쳐주는 역할을 한다.
+
+```js
+  yield all([counterSaga(), sampleSaga()]);
+```
+
 - call 함수: Promise를 반환하는 함수를 호출하고, 기다릴 수 있다. 첫 번째 파라미터는 함수, 나머지 파라미터는 해당 함수에 넣을 인수이다.
+
+```js
+const response = yield call(request, action.payload);
+
+```
+
 - takeEvery 함수 : 들어오는 모든 액션에 대해 특정 작업을 처리해준다.
+
+```js
+ yield takeEvery(INCREASE_ASYNC, increaseSaga);
+
+```
+
 - takeLatest 함수 : 기존에 진행 중이던 작업이 있다면 취소 처리하고 가장 마지막으로 실행된 작업만 수행한다.
-- put 함수 : 파라미터로 action을 받아 오면 액션의 정보를 조회할 수 있다.
+
+```js
+ yield takeLatest(DECREASE_ASYNC, decreaseSaga);
+```
+
+- put 함수 : 특정 액션을 디스패치한다. 파라미터로 action을 받아 오면 액션의 정보를 조회할 수 있다.
+
+```js
+yield put({
+        type: SUCCESS,
+        payload: response.data,
+      })
+
+yield put(startLoading(type));
+```
+
+- select 함수 : 사가 내부에서 현재 상태를 참조해야 하는 상황이 생기면 사용할 수 있다.
+
+```js
+const number = yield select((state) => state.counter); // state는 스토어 상태를 의미함.
+```
